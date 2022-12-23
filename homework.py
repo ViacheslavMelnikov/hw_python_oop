@@ -133,11 +133,13 @@ def read_package(workout_type: str, data: list) -> Training:
     training: dict[str, type[Training]] = {'SWM': Swimming,
                                            'RUN': Running,
                                            'WLK': SportsWalking}
-    if workout_type in training:
-        return training[workout_type](*data)
-    else:
-        print(f'Ключ {workout_type} не обнаружен в словаре! '
-              f'Доступны следующие ключи {list(training.keys())} ')
+    if workout_type not in training:
+        allowed = ', '.join(training)
+        raise ValueError(
+            f'Неизвестный тип тренировки: "{workout_type}".'
+            f' Допустимые значения: "{allowed}".'
+        )
+    return training[workout_type](*data)
 
 
 def main(training: Training) -> None:
@@ -148,7 +150,7 @@ def main(training: Training) -> None:
 
 if __name__ == '__main__':
     packages = [
-        ('SWM', [720, 1, 80, 25, 40]),
+        ('S1WM', [720, 1, 80, 25, 40]),
         ('RUN', [15000, 1, 75]),
         ('WLK', [9000, 1, 75, 180]),
     ]
